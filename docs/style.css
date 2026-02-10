@@ -1,0 +1,66 @@
+.board{
+    display: grid;
+    grid-template-columns:1fr 1fr 1fr;
+    grid-template-rows:1fr 1fr 1fr;
+    padding: 0.5rem;
+    background-color: darkslategray;
+    height: 70vw;
+    width: 70vw;
+    gap: 0.25rem;
+}
+
+.mark{
+    width: 100%;
+    height: 100%;
+}
+
+.cell{
+    background-color: white;
+    border-radius: 0.25rem;
+    border: 1px solid darkslategray;
+}
+
+.one{
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+
+.two{
+    grid-column-start: 2;
+    grid-row-start: 1;
+}
+
+.three{
+    grid-column-start: 3;
+    grid-row-start: 1;
+}
+
+.four{
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+
+.five{
+    grid-column-start: 2;
+    grid-row-start: 2;
+}
+
+.six{
+    grid-column-start: 3;
+    grid-row-start: 2;
+}
+
+.seven{
+    grid-column-start: 1;
+    grid-row-start: 3;
+}
+
+.eight{
+    grid-column-start: 2;
+    grid-row-start: 3;
+}
+
+.nine{
+    grid-column-start: 3;
+    grid-row-start: 3;
+}
