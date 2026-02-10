@@ -10,16 +10,20 @@
             grid-template-rows:1fr 1fr 1fr;
             padding: 0.5rem;
             background-color: darkslategray;
-            height: 70vw;
-            width: 70vw;
+            height: 50vw;
+            width: 50vw;
             gap: 0.25rem;
+            max-height: 700px;
+            max-width: 700px;
+            min-height: 250px;
+            min-width: 250px;
         }
 
         .description{
             display: flex;
             flex-direction: row;
             align-items: center;
-            width: 70vw;
+            width: 50vw;
             background-color: darkslategray;
             justify-content: space-between;
             padding: 1rem 0.5rem;
@@ -155,6 +159,10 @@
             grid-row-start: 3;
         }
 
+        .game-word{
+            white-space: nowrap;
+        }
+
     </style>
 </head>
 <body>
@@ -165,7 +173,7 @@
     </header>
     <div class="description">
        <div class="info">
-           <h1>The Game of Tic Tac Toe</h1>
+           <h1>The Game of <span class="game-word">Tic Tac Toe</span></h1>
            <a href="https://en.wikipedia.org/wiki/Tic-tac-toe" target="_blank">Learn more</a>
        </div>
         <div class="x-turn turn-info">
