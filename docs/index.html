@@ -3,30 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        .board{
+            display: grid;
+            grid-template-columns:1fr 1fr 1fr;
+            grid-template-rows:1fr 1fr 1fr;
+            padding: 0.5rem;
+            background-color: darkslategray;
+            height: 70vw;
+            width: 70vw;
+            gap: 0.25rem;
+        }
+
+        .description{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 70vw;
+            background-color: darkslategray;
+            justify-content: space-between;
+            padding: 1rem 0.5rem;
+            border-radius: 1rem 1rem 0 0 ;
+        }
+
+        main{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            align-content: center;
+            flex-wrap: wrap;
+        }
+
+        .turn-info{
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .x-turn{
+            background-color: white;
+            color: #d77335;
+            font-weight: bold;
+
+        }
+        .info{
+            margin-left: 1rem;
+        }
+
+        main h1:first-of-type{
+            margin-bottom: 0;
+            color: white;
+        }
+
+        a{
+            color: #d77335;
+        }
+
+        header{
+            height: 10vh;
+            width: calc(70vw + 1rem);
+        }
+
+        .title{
+            width: 100%;
+            height: 100%;
+        }
+
+        main footer{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: fixed;
+            background-color: darkslategray;
+            z-index: 100;
+            bottom: 0;
+            height: 10vh;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .start-btn{
+            border: none;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mark{
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .cell{
+            background-color: white;
+            border-radius: 0.25rem;
+            border: 1px solid darkslategray;
+            transition: background-color 0.5s ease;
+            cursor: pointer;
+        }
+
+
+
+        .cell:hover{
+            background-color: #b7bfbf;
+        }
+
+        .one{
+            grid-column-start: 1;
+            grid-row-start: 1;
+        }
+
+        .two{
+            grid-column-start: 2;
+            grid-row-start: 1;
+        }
+
+        .three{
+            grid-column-start: 3;
+            grid-row-start: 1;
+        }
+
+        .four{
+            grid-column-start: 1;
+            grid-row-start: 2;
+        }
+
+        .five{
+            grid-column-start: 2;
+            grid-row-start: 2;
+        }
+
+        .six{
+            grid-column-start: 3;
+            grid-row-start: 2;
+        }
+
+        .seven{
+            grid-column-start: 1;
+            grid-row-start: 3;
+        }
+
+        .eight{
+            grid-column-start: 2;
+            grid-row-start: 3;
+        }
+
+        .nine{
+            grid-column-start: 3;
+            grid-row-start: 3;
+        }
+
+    </style>
 </head>
 <body>
 <main>
     <header>
-        <img src="images/title.svg" alt="">
+        <img class="title" src="images/title.svg" alt="Tic Tac Toe Title">
+
     </header>
+    <div class="description">
+       <div class="info">
+           <h1>The Game of Tic Tac Toe</h1>
+           <a href="https://en.wikipedia.org/wiki/Tic-tac-toe" target="_blank">Learn more</a>
+       </div>
+        <div class="x-turn turn-info">
+            X's Turn
+        </div>
+    </div>
     <div class="board">
         <div class="cell one"></div>
         <div class="cell two"></div>
-        <div class="cell three">
+        <div class="cell three selected">
             <img class="mark" src="images/o-mark.svg" alt="o mark"/>
         </div>
         <div class="cell four"></div>
         <div class="cell five"></div>
         <div class="cell six"></div>
-        <div class="cell seven">
+        <div class="cell seven selected">
             <img class="mark" src="images/x-mark.svg" alt="x mark"/>
         </div>
         <div class="cell eight"></div>
-        <div class="cell nine">
+        <div class="cell nine selected">
             <img class="mark" src="images/o-mark.svg" alt="o mark"/>
         </div>
     </div>
+
+    <footer>
+        <button class="start-btn">Start Game</button>
+    </footer>
 </main>
 </body>
 </html>
