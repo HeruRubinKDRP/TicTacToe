@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Demos: Times Table + Temperature Converter</title>
+
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .error { color: #b00020; margin-top: 8px; min-height: 1.2em; font-size: 0.9rem; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        pre { margin-top: 20px; background: #f4f4f4; padding: 15px; white-space: pre-wrap; }
+
+        .row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+        fieldset { border: 0; padding: 0; margin: 0; display: flex; gap: 10px; align-items: center; }
+        label { cursor: pointer; }
+        input[type="number"] { width: 140px; padding: 6px 8px; }
+        h2 { margin-top: 18px; font-size: 2rem; }
+        .muted { opacity: 0.7; }
+        hr { margin: 28px 0; }
+    </style>
+</head>
+
+<body>
+
+<h1>Times Table Generator</h1>
+
+<form id="timesForm">
+    <label for="numberInput">Enter a number (1–12):</label>
+    <input type="number" id="numberInput" min="1" max="12" required />
+    <div id="timesErrorMessage" class="error"></div>
+</form>
+
+<pre id="timesOutput"></pre>
+
+<hr />
+
+<h1>Temperature Converter</h1>
+
+<div class="row">
+    <fieldset aria-label="Input unit">
+        <label>
+            <input type="radio" name="unit" value="F" checked />
+            °F
+        </label>
+        <label>
+            <input type="radio" name="unit" value="C" />
+            °C
+        </label>
+    </fieldset>
+
+    <label>
+        <span class="muted">Enter value:</span>
+        <input id="temperatureInput" type="number" inputmode="decimal" step="any" placeholder="e.g. 72" />
+    </label>
+</div>
+
+<div id="temperatureError" class="error" role="status" aria-live="polite"></div>
+<h2 id="temperatureOutput">—</h2>
+
+<!--initially I had an action button to run the fucntions but it was a pain to use, so I made it live update based on change. -->
+<!--the performance shuld still be ok since it's relatively simple math-->
+
+<script>
+
+    // Temperature Converter
+
+    // NIST exact conversions: https://www.nist.gov/pml/owm/si-units-temperature#temperature-conversion-exact
+    // F -> C = (F - 32) / 1.8
+    // C -> F = (C * 1.8) + 32
+
+    // I had these shorthanded to temp but I kept thinking it meant "temporary" :) so spelling it out...
+    const temperatureInputEl = document.getElementById("temperatureInput");
+    const temperatureOutputEl = document.getElementById("temperatureOutput");
+    const temperatureErrorEl = document.getElementById("temperatureError");
+
+    function getSelectedUnit() {
+        const checked = document.querySelector('input[name="unit"]:checked');
+        return checked ? checked.value : "F";
+    }
+
+    function convertTemperature(value, unit) {
+        if (unit === "F") {
+            return { value: (value - 32) / 1.8, unit: "°C" };
+        }
+        return { value: (value * 1.8) + 32, unit: "°F" };
+    }
+
+    function isValidNumber(n) {
+        return Number.isFinite(n);
+    }
+
+    function formatNumber(n) {
+        return Number.isInteger(n) ? String(n) : n.toFixed(2);
+    }
+
+    function renderTemp() {
+        const raw = temperatureInputEl.value;
+        const unit = getSelectedUnit();
+
+        //get rid of junky characters JIC
+        if (raw.trim() === "") {
+            temperatureErrorEl.textContent = "";
+            temperatureOutputEl.textContent = "—";
+            return;
+        }
+
+        //just to be safe - making sure it's a number and not a string. it should infer but not leaving to chance
+        const value = Number(raw);
+
+        if (!isValidNumber(value)) {
+            temperatureErrorEl.textContent = "Please enter a valid number.";
+            temperatureOutputEl.textContent = "—";
+            return;
+        }
+
+        temperatureErrorEl.textContent = "";
+        const result = convertTemperature(value, unit);
+
+        // unit is "F" or "C" so show °F/°C nicely
+        temperatureOutputEl.textContent = `${formatNumber(value)}°${unit} = ${formatNumber(result.value)}${result.unit}`;
+    }
+
+
+    temperatureInputEl.addEventListener("input", renderTemp);
+    document.querySelectorAll('input[name="unit"]').forEach(radio => {
+        // I'm running it on change because having to hit a "go" button is tedious
+        radio.addEventListener("change", renderTemp);
+    });
+
+    renderTemp();
+</script>
+
+<script>
+
+    // Times Table  Live Updating!!!
+
+
+    const timesInputEl = document.getElementById("numberInput");
+    const timesErrorEl = document.getElementById("timesErrorMessage");
+    const timesOutputEl = document.getElementById("timesOutput");
+
+    function generateTimesTable(num) {
+        let result = "";
+
+        for (let i = 1; i <= 12; i++) {
+            result += `${num} x ${i} = ${num * i}\n`;
+        }
+
+        return result;
+    }
+
+    function renderTimesTable() {
+        const raw = timesInputEl.value;
+
+        // Empty input
+        if (!raw) {
+            timesErrorEl.textContent = "";
+            timesOutputEl.textContent = "—";
+            return;
+        }
+
+        const value = Number(raw);
+
+        // Invalid or out of range
+        if (!Number.isFinite(value) || value < 1 || value > 12) {
+            timesErrorEl.textContent = "Number must be between 1 and 12.";
+            timesOutputEl.textContent = "—";
+            return;
+        }
+
+        // Valid
+        timesErrorEl.textContent = "";
+        timesOutputEl.textContent = generateTimesTable(value);
+    }
+
+    // Live update on every change
+    timesInputEl.addEventListener("input", renderTimesTable);
+
+    // Initial state
+    timesOutputEl.textContent = "—";
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+    <style>
+        .board{
+            display: grid;
+            grid-template-columns:1fr 1fr 1fr;
+            grid-template-rows:1fr 1fr 1fr;
+            padding: 0.5rem;
+            background-color: darkslategray;
+            height: 50vw;
+            width: 50vw;
+            gap: 0.25rem;
+            max-height: 700px;
+            max-width: 700px;
+            min-height: 250px;
+            min-width: 250px;
+        }
+
+        .description{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 50vw;
+            background-color: darkslategray;
+            justify-content: space-between;
+            padding: 1rem 0.5rem;
+            border-radius: 1rem 1rem 0 0;
+            max-width: 700px;
+        }
+
+        main{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            align-content: center;
+            flex-wrap: wrap;
+        }
+
+        .turn-info{
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #d77335;
+        }
+
+        .x-turn{
+            background-color: white;
+            color: #d77335;
+            font-weight: bold;
+            border-color: #d77335;
+
+        }
+        .info{
+            margin-left: 1rem;
+        }
+
+        main h1:first-of-type{
+            margin-bottom: 0;
+            color: white;
+        }
+
+        a{
+            color: #d77335;
+        }
+
+        header{
+            height: 10vh;
+            width: calc(70vw + 1rem);
+        }
+
+        .title{
+            width: 100%;
+            height: 100%;
+        }
+
+        main footer{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: fixed;
+            background-color: darkslategray;
+            z-index: 100;
+            bottom: 0;
+            height: 10vh;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .start-btn{
+            border: none;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mark{
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .square{
+            background-color: white;
+            border-radius: 0.25rem;
+            border: 1px solid darkslategray;
+            transition: background-color 0.5s ease;
+            cursor: pointer;
+        }
+
+
+
+        .cell:hover{
+            background-color: #b7bfbf;
+        }
+
+        #sq0{
+            grid-column-start: 1;
+            grid-row-start: 1;
+        }
+
+        #sq1{
+            grid-column-start: 2;
+            grid-row-start: 1;
+        }
+
+        #sq2{
+            grid-column-start: 3;
+            grid-row-start: 1;
+        }
+
+        #sq3{
+            grid-column-start: 1;
+            grid-row-start: 2;
+        }
+
+        #sq4{
+            grid-column-start: 2;
+            grid-row-start: 2;
+        }
+
+        #sq5{
+            grid-column-start: 3;
+            grid-row-start: 2;
+        }
+
+        #sq6{
+            grid-column-start: 1;
+            grid-row-start: 3;
+        }
+
+        #sq7{
+            grid-column-start: 2;
+            grid-row-start: 3;
+        }
+
+        #sq8{
+            grid-column-start: 3;
+            grid-row-start: 3;
+        }
+
+        .game-word{
+            white-space: nowrap;
+        }
+
+    </style>
+</head>
+<body>
+<main>
+    <header>
+        <img class="title" src="images/title.svg" alt="Tic Tac Toe Title">
+
+    </header>
+    <div class="description">
+        <div class="info">
+            <h1>The Game of <span class="game-word">Tic Tac Toe</span></h1>
+            <a href="https://en.wikipedia.org/wiki/Tic-tac-toe" target="_blank">Learn more</a>
+        </div>
+        <div class="x-turn turn-info">
+            X's Turn
+        </div>
+    </div>
+    <div class="board" id="board">
+        <script>
+            const NUM_SQUARES = 9;
+            for (i=0; i<NUM_SQUARES; i++)
+            {
+                id = "sq"+i;
+                document.write( "<div class='square' id='" + id + "'></div>" );
+            }
+        </script>
+    </div>
+
+    <footer>
+        <button class="start-btn">Start Game</button>
+    </footer>
+
+    <script>
+        function populateSquares(dataArray){
+            if(!Array.isArray(dataArray))return;
+
+            dataArray.forEach(item =>{
+                //safety check - bail out if not properly formed otherwise it'll error out
+                if(!Array.isArray(item) || item.length === 0)return;
+
+                // get which numbered square to put the mark
+                const index = item[0];
+                // is it an x or an o
+                const type = item[1];
+                const target = document.getElementById(`sq${index}`);
+                target.classList.add("selected");
+
+                if (!target)return;
+
+                if(type === "x"){
+                    // in class we were concatting things but js string type is much easier
+                    target.innerHTML= `<img class="mark" src="images/x-mark.svg" alt="x mark"/>`
+                }else if(type === "o"){
+                    target.innerHTML= `<img class="mark" src="images/o-mark.svg" alt="o mark"/>`
+                }
+
+
+
+
+
+            })
+        }
+
+        populateSquares([[2, 'o'], [6, 'x'], [8, 'o']]);
+
+    </script>
+</main>
+
+</body>
+</html>
