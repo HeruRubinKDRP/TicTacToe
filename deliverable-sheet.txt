@@ -1,0 +1,5 @@
+code in docs folder
+
+TTT V2 link: https://herurubinkdrp.github.io/TicTacToe/ttt_v2.html
+
+Practice link: https://herurubinkdrp.github.io/TicTacToe/practice.html
