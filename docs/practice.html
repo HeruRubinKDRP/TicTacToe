@@ -180,6 +180,30 @@
     timesOutputEl.textContent = "—";
 </script>
 
+    <script>
+
+        let numbersArray = [1,2];
+        const desiredEntries = 5; // how many new
+        const startCount = numbersArray.length;
+
+        //subtract one because .length starts at 1 but we want to start at the index of array is 0
+        for(let i=startCount-1; i<startCount+desiredEntries-1; i++) {
+            numbersArray.push( numbersArray[i] + numbersArray[i-1] );
+        }
+        console.log(numbersArray);
+        let displayMarkup = "";
+
+        numbersArray.forEach(number => {
+            displayMarkup += `<li>${number}</li>`;
+        })
+
+        //there should only be one body but just in case there are more, this will target the first one
+        const bodyTag = document.getElementsByTagName("body")[0];
+        console.log(bodyTag);
+        bodyTag.innerHTML=`<ul style="list-style: circle">${displayMarkup}</ul>`;
+
+    </script>
+
 
 </body>
 </html>

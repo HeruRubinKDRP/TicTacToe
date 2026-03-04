@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+    <style>
+
+        .board{
+            display: grid;
+            grid-template-columns:1fr 1fr 1fr;
+            grid-template-rows:1fr 1fr 1fr;
+            padding: 0.5rem;
+            background-color: darkslategray;
+            height: 50vw;
+            width: 50vw;
+            gap: 0.25rem;
+            max-height: 700px;
+            max-width: 700px;
+            min-height: 250px;
+            min-width: 250px;
+        }
+
+        .description{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 50vw;
+            background-color: darkslategray;
+            justify-content: space-between;
+            padding: 1rem 0.5rem;
+            border-radius: 1rem 1rem 0 0;
+            max-width: 700px;
+        }
+
+        main{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            align-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 12vh;
+        }
+
+        .turn-info{
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #d77335;
+            font-weight: bold;
+        }
+
+        .x-turn{
+            background-color: white;
+            color: #d77335;
+            border-color: #d77335;
+        }
+
+        .o-turn{
+            background-color: white;
+            color: darkslategray;
+            border-color: darkslategray;
+        }
+
+
+        .info{
+            margin-left: 1rem;
+        }
+
+        main h1:first-of-type{
+            margin-bottom: 0;
+            color: white;
+        }
+
+        a{
+            color: #d77335;
+        }
+
+        header{
+            height: 10vh;
+            width: calc(70vw + 1rem);
+        }
+
+        .title{
+            width: 100%;
+            height: 100%;
+        }
+
+        main footer{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: fixed;
+            background-color: darkslategray;
+            z-index: 100;
+            bottom: 0;
+            height: 10vh;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .start-btn{
+            border: none;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mark{
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .square{
+            background-color: white;
+            border-radius: 0.25rem;
+            border: 1px solid darkslategray;
+            transition: background-color 0.5s ease;
+            cursor: pointer;
+        }
+
+
+
+        .square:hover{
+            background-color: #b7bfbf;
+        }
+
+        #sq0{
+            grid-column-start: 1;
+            grid-row-start: 1;
+        }
+
+        #sq1{
+            grid-column-start: 2;
+            grid-row-start: 1;
+        }
+
+        #sq2{
+            grid-column-start: 3;
+            grid-row-start: 1;
+        }
+
+        #sq3{
+            grid-column-start: 1;
+            grid-row-start: 2;
+        }
+
+        #sq4{
+            grid-column-start: 2;
+            grid-row-start: 2;
+        }
+
+        #sq5{
+            grid-column-start: 3;
+            grid-row-start: 2;
+        }
+
+        #sq6{
+            grid-column-start: 1;
+            grid-row-start: 3;
+        }
+
+        #sq7{
+            grid-column-start: 2;
+            grid-row-start: 3;
+        }
+
+        #sq8{
+            grid-column-start: 3;
+            grid-row-start: 3;
+        }
+
+        .game-word{
+            white-space: nowrap;
+        }
+
+    </style>
+</head>
+<body>
+<main>
+    <header>
+        <img class="title" src="images/title.svg" alt="Tic Tac Toe Title">
+
+    </header>
+    <div class="description">
+        <div class="info" id="InfoDisplay">
+            <h1>The Game of <span class="game-word">Tic Tac Toe</span></h1>
+            <a href="https://en.wikipedia.org/wiki/Tic-tac-toe" target="_blank">Learn more</a>
+        </div>
+        <div id="TurnDisplay"></div>
+    </div>
+    <div class="board" id="board">
+        <script>
+            //set the board game up
+            const NUM_SQUARES = 9;
+            for (i=0; i<NUM_SQUARES; i++)
+            {
+                id = "sq"+i;
+                document.write( "<div class='square' data-id='" + i + "' id='" + id + "'></div>" );
+            }
+        </script>
+    </div>
+
+    <footer>
+        <button id="start" class="start-btn">Start Game</button>
+    </footer>
+
+    <script>
+        let boardArray = Array(9).fill(null); // [null, null, ...] start empty list of nine we will replace
+        let currentPlayer = "x";
+        let moves = ["-","-","-","-","-","-","-","-","-",]
+
+        function randomPlayer() {
+            currentPlayer = Math.random() < 0.5 ? "x" : "o";
+        }
+
+        function resetGame() {
+            boardArray = Array(9).fill(null);
+            randomPlayer();
+            populateSquares();
+            playerDisplay();
+        }
+
+        function checkWinConditions(){
+            //it doesn't make sense to create a ton of checks against every possible win condidtion
+            //I made a win state check that checks for either three in a row, three in a column, or three in a diagonal
+            //within the game state I am cheecking for hyphen so we don't need a separte pass
+            // this way I can manage each set of win conditions in one pass instead of having to check for each win condition separately
+            //source: I took Harvard's CS50 Game development course GD50 where I created several games like match 3 where we learned about state trees like this
+
+            //loop over each move and check for win conditions, if there is a win condition alert the winner and reset the game
+            for (let i = 0; i < moves.length; i++){
+                if (moves[0] === moves[1] && moves[1] === moves[2] && moves[0] !== "-"){
+                    alert(`${moves[0]} wins!`);
+                    resetGame();
+                    return;
+                }
+                if (moves[3] === moves[4] && moves[4] === moves[5] && moves[3] !== "-"){
+                    alert(`${moves[3]} wins!`);
+                    resetGame();
+                    return;
+                }
+                if (moves[6] === moves[7] && moves[7] === moves[8] && moves[6] !== "-"){
+                    alert(`${moves[6]} wins!`);
+                    resetGame();
+                    return;
+                }
+                if (moves[0] === moves[3] && moves[3] === moves[6] && moves[0] !== "-"){
+                    alert(`${moves[0]} wins!`);
+                    resetGame();
+                    return;
+                }
+                if (moves[1] === moves[4] && moves[4] === moves[7] && moves[1] !== "-"){
+                    alert(`${moves[1]} wins!`);
+                    resetGame();
+                    return;
+                }
+                if (moves[2] === moves[5] && moves[5] === moves[8] && moves[2] !== "-"){
+                    alert(`${moves[2]} wins!`);
+                    resetGame();
+                    return;
+                }
+                if (moves[0] === moves[4] && moves[4] === moves[8] && moves[0] !== "-"){
+                    alert(`${moves[0]} wins!`);
+                    resetGame();
+                    return;
+                }
+                if (moves[2] === moves[4] && moves[4] === moves[6] && moves[2] !== "-"){
+                    alert(`${moves[2]} wins!`);
+                    resetGame();
+                    return;
+                }
+            }
+        }
+
+        function populateSquares(){
+            for (let i = 0; i < boardArray.length; i++) {
+                const target = document.getElementById(`sq${i}`);
+                if (!target) continue;
+
+                const mark = boardArray[i];
+
+                // reset square
+                target.classList.toggle("selected", mark !== null);
+
+                if (mark === "x") {
+                    target.innerHTML = `<img class="mark" src="images/x-mark.svg" alt="x mark" />`;
+                } else if (mark === "o") {
+                    target.innerHTML = `<img class="mark" src="images/o-mark.svg" alt="o mark" />`;
+                } else {
+                    target.innerHTML = "";
+                }
+            }
+        }
+
+        function handleSquareClick(e) {
+
+            const square = e.target.closest(".square");
+            if (!square) return; // clicked outside a square
+
+            const index = Number(square.getAttribute('data-id')); // 0..8
+
+            // Prevent overwriting a filled cell
+            if (boardArray[index] !== null) return;
+
+            // Update state
+            boardArray[index] = currentPlayer;
+
+            //Update moves
+            moves[index] = currentPlayer;
+            console.log(moves);
+
+            // Take turns
+            currentPlayer = currentPlayer === "x" ? "o" : "x";
+
+            populateSquares();
+            checkWinConditions();
+            playerDisplay();
+
+        }
+
+        function startGame() {
+            const boardElement = document.getElementById('board');
+            boardElement.addEventListener('click', handleSquareClick);
+            playerDisplay();
+            const startButton = document.getElementById("start");
+            startButton.addEventListener("click", resetGame);
+
+        }
+
+        function playerDisplay() {
+            const turnDisplay = document.getElementById("TurnDisplay");
+            turnDisplay.innerHTML = currentPlayer === "x" ? `
+            <div class="x-turn turn-info">
+                X's Turn
+            </div>`
+                :
+                `
+            <div class="o-turn turn-info">
+                O's Turn
+            </div>`;
+
+        }
+        resetGame();
+        startGame();
+
+    </script>
+</main>
+
+</body>
+</html>

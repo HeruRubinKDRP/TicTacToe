@@ -1,0 +1,12 @@
+Deliverable Worksheet:
+ ttt3.html uploaded to canvas
+ ttt4.html uploaded to canvas
+ all URL’s
+working online
+URL for ttt3:  https://herurubinkdrp.github.io/TicTacToe/ttt_v3.html 
+URL for ttt4:  https://herurubinkdrp.github.io/TicTacToe/ttt_v4.html 
+
+Answer to question: What do you think of events? Love them? Hate them? Explain your
+answer.
+
+events should probably be something abstracted away from common production development, it's a bit verbose and non-intuitive especially when you have to manage cleaning up events in a dynamic SPA. React and other frameworks hide this from devs, and those are quite popular so seems like it makes sense to hide this task. 

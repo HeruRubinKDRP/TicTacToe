@@ -181,15 +181,14 @@
 <main>
     <header>
         <img class="title" src="images/title.svg" alt="Tic Tac Toe Title">
+
     </header>
     <div class="description">
         <div class="info" id="InfoDisplay">
             <h1>The Game of <span class="game-word">Tic Tac Toe</span></h1>
             <a href="https://en.wikipedia.org/wiki/Tic-tac-toe" target="_blank">Learn more</a>
         </div>
-        <div class="x-turn turn-info">
-            X's Turn
-        </div>
+        <div id="TurnDisplay"></div>
     </div>
     <div class="board" id="board">
         <script>
@@ -208,8 +207,9 @@
     </footer>
 
     <script>
-        let boardArray = [null, null, "x", null, "o", null, null, null, "x"];
-
+        let boardArray = Array(9).fill(null); // [null, null, ...] start empty list of nine we will replace
+        let currentPlayer = "x";
+        let moves = ["-","-","-","-","-","-","-","-","-",]
 
         function populateSquares(){
             for (let i = 0; i < boardArray.length; i++) {
@@ -234,16 +234,92 @@
         function handleSquareClick(e) {
             const square = e.target.closest(".square");
             if (!square) return; // clicked outside a square
-            const index = Number(square.getAttribute('data-id')); // 0..8
-            alert(index);
 
+            const index = Number(square.getAttribute('data-id')); // 0..8
+
+            // Prevent overwriting a filled cell
+            if (boardArray[index] !== null) return;
+
+            // Update state
+            boardArray[index] = currentPlayer;
+            moves[index] = currentPlayer;
+            console.log(moves);
+
+            // Take turns
+            currentPlayer = currentPlayer === "x" ? "o" : "x";
+
+            populateSquares();
+            checkWinConditions();
+            playerDisplay();
+
+        }
+
+        function checkWinConditions(){
+            for (let i = 0; i < moves.length; i++){
+                    if (moves[0] === moves[1] && moves[1] === moves[2] && moves[0] !== "-"){
+                        alert(`${moves[0]} wins!`);
+                        resetGame();
+                        return;
+                    }
+                    if (moves[3] === moves[4] && moves[4] === moves[5] && moves[3] !== "-"){
+                        alert(`${moves[3]} wins!`);
+                        resetGame();
+                        return;
+                    }
+                    if (moves[6] === moves[7] && moves[7] === moves[8] && moves[6] !== "-"){
+                        alert(`${moves[6]} wins!`);
+                        resetGame();
+                        return;
+                    }
+                    if (moves[0] === moves[3] && moves[3] === moves[6] && moves[0] !== "-"){
+                        alert(`${moves[0]} wins!`);
+                        resetGame();
+                        return;
+                    }
+                    if (moves[1] === moves[4] && moves[4] === moves[7] && moves[1] !== "-"){
+                        alert(`${moves[1]} wins!`);
+                        resetGame();
+                        return;
+                    }
+                    if (moves[2] === moves[5] && moves[5] === moves[8] && moves[2] !== "-"){
+                        alert(`${moves[2]} wins!`);
+                        resetGame();
+                        return;
+                    }
+                    if (moves[0] === moves[4] && moves[4] === moves[8] && moves[0] !== "-"){
+                        alert(`${moves[0]} wins!`);
+                        resetGame();
+                        return;
+                    }
+                    if (moves[2] === moves[4] && moves[4] === moves[6] && moves[2] !== "-"){
+                        alert(`${moves[2]} wins!`);
+                        resetGame();
+                        return;
+                    }
+            }
         }
 
         function startGame() {
             const boardElement = document.getElementById('board');
             boardElement.addEventListener('click', handleSquareClick);
-            populateSquares();
-        } 
+
+            const startButton = document.getElementById(".start-btn");
+            playerDisplay();
+        }
+
+        function playerDisplay() {
+            const turnDisplay = document.getElementById("TurnDisplay");
+            turnDisplay.innerHTML = currentPlayer === "x" ? `
+            <div class="x-turn turn-info">
+                X's Turn
+            </div>`
+                :
+                `
+            <div class="o-turn turn-info">
+                O's Turn
+            </div>`;
+
+        }
 
         startGame();
 

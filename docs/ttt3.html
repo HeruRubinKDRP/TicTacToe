@@ -181,14 +181,15 @@
 <main>
     <header>
         <img class="title" src="images/title.svg" alt="Tic Tac Toe Title">
-
     </header>
     <div class="description">
         <div class="info" id="InfoDisplay">
             <h1>The Game of <span class="game-word">Tic Tac Toe</span></h1>
             <a href="https://en.wikipedia.org/wiki/Tic-tac-toe" target="_blank">Learn more</a>
         </div>
-        <div id="TurnDisplay"></div>
+        <div class="x-turn turn-info">
+            X's Turn
+        </div>
     </div>
     <div class="board" id="board">
         <script>
@@ -207,8 +208,8 @@
     </footer>
 
     <script>
-        let boardArray = Array(9).fill(null); // [null, null, ...] start empty list of nine we will replace
-        let currentPlayer = "x";
+        let boardArray = [null, null, "x", null, "o", null, null, null, "x"];
+
 
         function populateSquares(){
             for (let i = 0; i < boardArray.length; i++) {
@@ -231,44 +232,17 @@
         }
 
         function handleSquareClick(e) {
-
             const square = e.target.closest(".square");
             if (!square) return; // clicked outside a square
-
             const index = Number(square.getAttribute('data-id')); // 0..8
-
-            // Prevent overwriting a filled cell
-            if (boardArray[index] !== null) return;
-
-            // Update state
-            boardArray[index] = currentPlayer;
-
-            // Take turns
-            currentPlayer = currentPlayer === "x" ? "o" : "x";
-
-            populateSquares();
-            playerDisplay();
+            alert(index);
 
         }
 
         function startGame() {
             const boardElement = document.getElementById('board');
             boardElement.addEventListener('click', handleSquareClick);
-            playerDisplay();
-        }
-
-        function playerDisplay() {
-            const turnDisplay = document.getElementById("TurnDisplay");
-            turnDisplay.innerHTML = currentPlayer === "x" ? `
-            <div class="x-turn turn-info">
-                X's Turn
-            </div>`
-                :
-                `
-            <div class="o-turn turn-info">
-                O's Turn
-            </div>`;
-
+            populateSquares();
         }
 
         startGame();
